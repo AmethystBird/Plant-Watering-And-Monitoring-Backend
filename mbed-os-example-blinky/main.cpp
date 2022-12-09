@@ -16,8 +16,14 @@ using namespace std;
 
 int main()
 {
+    Timer provisionalTimer;
+
     Sensor* lightSensor = new Sensor(A0, "light", 500ms);
     lightSensor->StartSensing();
+    provisionalTimer.start();
+    ThisThread::sleep_for(15000ms);
+    //while (provisionalTimer.elapsed_time() < 5s);
+    lightSensor->StopSensing();
 
     // Initialise the digital pin LED1 as an output
     /*DigitalOut led(LED1);

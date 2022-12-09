@@ -3,22 +3,32 @@
 Sensor::Sensor(PinName sensorPinIn, string sensorTypeIn, chrono::milliseconds readRateIn) : sensor(sensorPinIn) {
     sensorType = sensorTypeIn;
     readRate = readRateIn;
+    isSensing = false;
 }
 
-double Sensor::StartSensing()
+void Sensor::StartSensing()
 {
-    if (sensorType == "light")
+    isSensing = true;
+    updateLoopThread.start(callback(this, &Sensor::UpdateLoop));
+}
+
+void Sensor::UpdateLoop()
+{
+    while (isSensing)
     {
-        while (true)
-        {
-            DisplaySensorValue("Light Level: ");
-            ThisThread::sleep_for(readRate);
-        }
+        cout << "Light Level: ";
+        DisplaySensorValue();
+        ThisThread::sleep_for(readRate);
     }
-    return 0.0;
+    updateLoopThread.join();
 }
 
-void Sensor::DisplaySensorValue(string sensorDenominator)
+void Sensor::StopSensing()
 {
-    cout << sensorDenominator << sensor << "\n";
+    isSensing = false;
+}
+
+void Sensor::DisplaySensorValue()
+{
+    cout << sensor << "\n";
 }

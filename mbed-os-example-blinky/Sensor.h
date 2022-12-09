@@ -8,14 +8,19 @@ Sensor(PinName sensorPinIn, string sensorTypeIn, chrono::milliseconds readRateIn
 
 AnalogIn GetSensor();
 
-double StartSensing();
+void StartSensing();
+void StopSensing();
 
 protected:
-void DisplaySensorValue(string sensorLevelText);
+void DisplaySensorValue();
+void UpdateLoop();
 
 private:
+Thread updateLoopThread;
 AnalogIn sensor; //sensor
 double sensorValue;
 string sensorType;
 chrono::milliseconds readRate;
+
+bool isSensing;
 };
