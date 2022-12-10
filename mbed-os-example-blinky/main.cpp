@@ -18,12 +18,15 @@ int main()
 {
     Timer provisionalTimer;
 
-    Sensor* lightSensor = new Sensor(A0, "light", 500ms);
+    Sensor* lightSensor = new Sensor(A0, "Light", 500ms);
+    Sensor* tempAndHumidSensor = new Sensor(A3, "Temperature Humidity", 500ms);
     lightSensor->StartSensing();
+    tempAndHumidSensor->StartSensing();
     provisionalTimer.start();
     ThisThread::sleep_for(15000ms);
     //while (provisionalTimer.elapsed_time() < 5s);
     lightSensor->StopSensing();
+    tempAndHumidSensor->StopSensing();
 
     // Initialise the digital pin LED1 as an output
     /*DigitalOut led(LED1);

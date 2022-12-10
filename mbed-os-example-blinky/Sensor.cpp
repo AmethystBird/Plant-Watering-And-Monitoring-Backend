@@ -16,7 +16,7 @@ void Sensor::UpdateLoop()
 {
     while (isSensing)
     {
-        cout << "Light Level: ";
+        cout << sensorType << " Level: ";
         DisplaySensorValue();
         ThisThread::sleep_for(readRate);
     }
