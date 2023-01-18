@@ -13,11 +13,12 @@ void StopSensing();
 
 protected:
 void DisplaySensorValue();
+float GetMockedSensorValue();
 void UpdateLoop();
 
 private:
 Thread updateLoopThread;
-AnalogIn sensor; //sensor
+AnalogIn sensorInput; //sensor
 double sensorValue;
 string sensorType;
 chrono::milliseconds readRate;
