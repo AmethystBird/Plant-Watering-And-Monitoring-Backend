@@ -30,22 +30,39 @@ void Sensor::StopSensing()
 
 void Sensor::DisplaySensorValue()
 {
-    if (sensorType == "Temperature and Humidity")
+    if (sensorType == "Temperature" || "Humidity")
     {
-        float mockedTemperatureValue = GetMockedSensorValue();
-        float mockedHumidityValue = GetMockedSensorValue();
+        //Extra code will likely be placed here when actual sensor is used
+        //
+        if (sensorType == "Temperature")
+        {
+            float mockedTemperatureValue = GetMockedSensorValue();
 
-        cout << "Temperature: (Mocked)" << mockedTemperatureValue << "\n";
-        cout << "Humidity: (Mocked)" << mockedHumidityValue << "\n\n";
+            cout << "Temperature: (Mocked)" << mockedTemperatureValue << "\n";
+
+            sensorBuffer.push_back(mockedTemperatureValue);
+        }
+        else if (sensorType == "Humidity")
+        {
+            float mockedHumidityValue = GetMockedSensorValue();
+
+            cout << "Humidity: (Mocked)" << mockedHumidityValue << "\n\n";
+
+            sensorBuffer.push_back(mockedHumidityValue);
+        }
     }
     else if (sensorType == "Moisture")
     {
         float randomMoistureValue = GetMockedSensorValue();
         cout << "Moisture: (Mocked)" << randomMoistureValue << "\n\n";
+        sensorBuffer.push_back(randomMoistureValue);
     }
     else if (sensorType == "Light")
     {
         cout << "Light: " << sensorInput << "\n\n";
+        
+        float sensorInputValue = (float) sensorInput;
+        sensorBuffer.push_back(sensorInputValue);
     }
 }
 
@@ -55,4 +72,29 @@ float Sensor::GetMockedSensorValue()
     float randomDecimalValue = static_cast<float>(randomValue);
     randomDecimalValue = randomDecimalValue / 100.f;
     return randomDecimalValue;
+}
+
+/*float* Sensor::GetUpdatingValues()
+{
+    return sensorBuffer.data();
+}*/
+
+vector<float>* Sensor::GetUpdatingValues()
+{
+    return &sensorBuffer;
+}
+
+float Sensor::GetLastValue()
+{
+    if (sensorBuffer.empty())
+    {
+        cout << "[WARNING] " << sensorType << " buffer is empty.\n";
+        return 0.f;
+    }
+    return sensorBuffer.front();
+}
+
+string Sensor::GetSensorType()
+{
+    return sensorType;
 }

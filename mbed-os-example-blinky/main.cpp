@@ -2,10 +2,7 @@
  * Copyright (c) 2019 ARM Limited
  * SPDX-License-Identifier: Apache-2.0
  */
-
-#include "mbed.h"
-#include <iostream>
-#include "Sensor.h"
+#include "NetworkData.h"
 
 using namespace std;
 
@@ -32,21 +29,42 @@ int main()
 
     while(1);*/
 
+    /*int success = InitialiseAzureDemo();
+
+    if (success != 0)
+    {
+        return success;
+    }*/
+
     Timer provisionalTimer;
 
     Sensor* lightSensor = new Sensor(A0, "Light", 500ms);
-    Sensor* tempAndHumidSensor = new Sensor(A3, "Temperature and Humidity", 500ms);
+    Sensor* temperatureSensor = new Sensor(A3, "Temperature", 500ms);
+    Sensor* humiditySensor = new Sensor(A3, "Humidity", 500ms);
     Sensor* moistureSensor = new Sensor(A3, "Moisture", 500ms);
 
     lightSensor->StartSensing();
-    tempAndHumidSensor->StartSensing();
+    temperatureSensor->StartSensing();
+    humiditySensor->StartSensing();
     moistureSensor->StartSensing();
-    
+
+    vector<Sensor*> updatingValuesFromSensors;
+
+    updatingValuesFromSensors.push_back(lightSensor);
+    updatingValuesFromSensors.push_back(temperatureSensor);
+    updatingValuesFromSensors.push_back(humiditySensor);
+    updatingValuesFromSensors.push_back(moistureSensor);
+
+    //NetworkData* networkData = new NetworkData(updatingValuesFromSensors);
+    //networkData->SendData();
+
     provisionalTimer.start();
     ThisThread::sleep_for(15000ms);
-    //while (provisionalTimer.elapsed_time() < 5s);
-    //lightSensor->StopSensing();
-    //tempAndHumidSensor->StopSensing();
+    while (provisionalTimer.elapsed_time() < 5s);
+    lightSensor->StopSensing();
+    temperatureSensor->StopSensing();
+    humiditySensor->StopSensing();
+    moistureSensor->StopSensing();
 
     // Initialise the digital pin LED1 as an output
     /*DigitalOut led(LED1);

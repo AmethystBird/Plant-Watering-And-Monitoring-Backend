@@ -1,6 +1,7 @@
 #include "mbed.h"
-#include <chrono>
+//#include <chrono>
 #include <iostream>
+#include <vector>
 
 class Sensor {
 public:
@@ -10,6 +11,12 @@ AnalogIn GetSensor();
 
 void StartSensing();
 void StopSensing();
+
+//float* GetUpdatingValues();
+vector<float>* GetUpdatingValues();
+float GetLastValue();
+
+string GetSensorType();
 
 protected:
 void DisplaySensorValue();
@@ -24,4 +31,6 @@ string sensorType;
 chrono::milliseconds readRate;
 
 bool isSensing;
+
+vector<float> sensorBuffer;
 };
