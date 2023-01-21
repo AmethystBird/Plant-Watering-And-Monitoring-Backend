@@ -1,13 +1,15 @@
+#pragma once
 #include "Azure.h"
-#include "Sensor.h"
 
 class NetworkData {
 public:
-NetworkData(vector<Sensor*> updatingValuesFromSensorsIn);
-protected:
-void UpdateLoop();
+  NetworkData(vector<Sensor *> updatingValuesFromSensorsIn,
+              chrono::milliseconds uploadRateIn);
+
 private:
-Thread updateLoopThread;
-bool isSending;
-vector<Sensor*> updatingValuesFromSensors;
+  Thread uploadLoopThread;
+  bool isUploading;
+  vector<Sensor *> updatingValuesFromSensors;
+  chrono::milliseconds readRate;
+  EventQueue uploadQueue;
 };

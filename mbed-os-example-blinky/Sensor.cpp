@@ -1,12 +1,25 @@
 #include "Sensor.h"
+#include "EventQueue.h"
 
 Sensor::Sensor(PinName sensorPinIn, string sensorTypeIn, chrono::milliseconds readRateIn) : sensorInput(sensorPinIn) {
     sensorType = sensorTypeIn;
     readRate = readRateIn;
     isSensing = false;
+
+    auto DataString = [this]() {
+        cout << "Sensor: " << sensorType << "\n";
+        this->DisplaySensorValue();
+    };
+
+    auto DispatchToQueue = [this]() {
+        this->sensorQueue.dispatch_forever();
+    };
+
+    updateLoopThread.start(DispatchToQueue);
+    sensorQueue.call_every(readRate, DataString);
 }
 
-void Sensor::StartSensing()
+/*void Sensor::StartSensing()
 {
     isSensing = true;
     updateLoopThread.start(callback(this, &Sensor::UpdateLoop));
@@ -21,7 +34,7 @@ void Sensor::UpdateLoop()
         ThisThread::sleep_for(readRate);
     }
     updateLoopThread.join();
-}
+}*/
 
 void Sensor::StopSensing()
 {
@@ -91,7 +104,9 @@ float Sensor::GetLastValue()
         cout << "[WARNING] " << sensorType << " buffer is empty.\n";
         return 0.f;
     }
-    return sensorBuffer.front();
+    float valueToSend = sensorBuffer.front();
+    sensorBuffer.erase(sensorBuffer.begin());
+    return valueToSend;
 }
 
 string Sensor::GetSensorType()

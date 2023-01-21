@@ -1,3 +1,4 @@
+#pragma once
 #include "mbed.h"
 //#include "rtos/ThisThread.h"
 #include "NTPClient.h"
@@ -14,6 +15,10 @@
 
 #include "iothubtransportmqtt.h"
 #include "azure_cloud_credentials.h"
+
+#include "Sensor.h"
+#include <vector>
+
 //#include <cstring>
 //#include <string.h>
 
@@ -23,3 +28,5 @@ static void on_message_sent(IOTHUB_CLIENT_CONFIRMATION_RESULT result, void* user
 static int on_method_callback(const char* method_name, const unsigned char* payload, size_t size, unsigned char** response, size_t* response_size, void* userContextCallback);
 void demo();
 int InitialiseAzureDemo();
+
+void NetworkDataUpdateLoop(vector<Sensor *> updatingValuesFromSensors);
