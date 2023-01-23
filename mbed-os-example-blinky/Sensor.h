@@ -1,17 +1,20 @@
 #pragma once
+#include "EventQueue.h"
 #include "mbed.h"
+#include "Sensor.h"
 //#include <chrono>
 #include <iostream>
 #include <vector>
 
+template <class sensorPin>
 class Sensor {
 public:
-  Sensor(PinName sensorPinIn, string sensorTypeIn,
+  Sensor(sensorPin sensorPinIn, string sensorNameIn,
          chrono::milliseconds readRateIn);
 
   AnalogIn GetSensor();
 
-  //void StartSensing();
+  // void StartSensing();
   void StopSensing();
 
   // float* GetUpdatingValues();
@@ -23,14 +26,14 @@ public:
 protected:
   void DisplaySensorValue();
   float GetMockedSensorValue();
-  //void UpdateLoop();
+  // void UpdateLoop();
 
 private:
   Thread updateLoopThread;
   EventQueue sensorQueue;
-  AnalogIn sensorInput; // sensor
+  sensorPin sensorType; // sensor
   // double sensorValue;
-  string sensorType;
+  string sensorName;
   chrono::milliseconds readRate;
 
   bool isSensing;

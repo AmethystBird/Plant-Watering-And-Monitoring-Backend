@@ -253,7 +253,7 @@ int InitialiseAzureDemo() {
     return 0;
 }
 
-void NetworkDataUpdateLoop(vector<Sensor *> updatingValuesFromSensors) {
+void NetworkDataUpdateLoop(vector<Sensor<AnalogIn> *> updatingValuesFromSensors) {
     bool trace_on = MBED_CONF_APP_IOTHUB_CLIENT_TRACE;
     tickcounter_ms_t interval = 100;
     IOTHUB_CLIENT_RESULT res;
@@ -353,7 +353,8 @@ void NetworkDataUpdateLoop(vector<Sensor *> updatingValuesFromSensors) {
         float humidityValue = updatingValuesFromSensors[2]->GetLastValue();
         float moistureValue = updatingValuesFromSensors[3]->GetLastValue();
 
-        sprintf(message, "{ \"Light\" : %5.2f, \"Temperature\" : %5.2f, \"Humidity\" : %5.2f, \"Moisture\" : %5.2f }", lightValue, temperatureValue, humidityValue, moistureValue);
+        //sprintf(message, "{ \"Light\" : %5.2f, \"Temperature\" : %5.2f, \"Humidity\" : %5.2f, \"Moisture\" : %5.2f }", lightValue, temperatureValue, humidityValue, moistureValue);
+        sprintf(message, "{ \"Light\" : %5.2f }", lightValue);
 
         /*double light = (float) i;
         double temp  = (float)36.0f-0.1*(float)i;

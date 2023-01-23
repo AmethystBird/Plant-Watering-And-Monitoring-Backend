@@ -29,4 +29,4 @@ static int on_method_callback(const char* method_name, const unsigned char* payl
 void demo();
 int InitialiseAzureDemo();
 
-void NetworkDataUpdateLoop(vector<Sensor *> updatingValuesFromSensors);
+void NetworkDataUpdateLoop(vector<Sensor<AnalogIn> *> updatingValuesFromSensors);

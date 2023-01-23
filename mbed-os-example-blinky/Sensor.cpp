@@ -1,8 +1,8 @@
 #include "Sensor.h"
-#include "EventQueue.h"
 
-Sensor::Sensor(PinName sensorPinIn, string sensorTypeIn, chrono::milliseconds readRateIn) : sensorInput(sensorPinIn) {
-    sensorType = sensorTypeIn;
+template <class sensorPin>
+Sensor<sensorPin>::Sensor(PinName sensorPinIn, string sensorNameIn, chrono::milliseconds readRateIn) : sensorType(sensorPinIn) {
+    sensorName = sensorNameIn;
     readRate = readRateIn;
     isSensing = false;
 
@@ -45,8 +45,6 @@ void Sensor::DisplaySensorValue()
 {
     if (sensorType == "Temperature" || "Humidity")
     {
-        //Extra code will likely be placed here when actual sensor is used
-        //
         if (sensorType == "Temperature")
         {
             float mockedTemperatureValue = GetMockedSensorValue();

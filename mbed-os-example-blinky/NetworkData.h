@@ -3,13 +3,13 @@
 
 class NetworkData {
 public:
-  NetworkData(vector<Sensor *> updatingValuesFromSensorsIn,
+  NetworkData(vector<Sensor<AnalogIn> *> updatingValuesFromSensorsIn,
               chrono::milliseconds uploadRateIn);
 
 private:
   Thread uploadLoopThread;
   bool isUploading;
-  vector<Sensor *> updatingValuesFromSensors;
+  vector<Sensor<AnalogIn> *> updatingValuesFromSensors;
   chrono::milliseconds readRate;
   EventQueue uploadQueue;
 };

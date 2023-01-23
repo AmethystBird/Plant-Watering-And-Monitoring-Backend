@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 #pragma once
-#include "DHT.h"
 #include "NetworkData.h"
+#include "dht20.h"
 using namespace std;
 
 // Blinking rate in milliseconds
@@ -13,48 +13,39 @@ using namespace std;
 // AnalogIn light(A0);
 
 int main() {
-  /*DHT th(D14, DHT11);
-  wait_us(250000);
-  int err = th.readData();
-  wait_us(250000);
-  if (err != 0) {
-      puts("Error from sensor");
-      printf("%d\n\r", err);
-      //while(1);
+  /*DHT20 th;
+  while (true) {
+    DHT20::EnvData dat = th.readTemperatureAndHumidity();
+    printf("Temp: %f\n\rHumidity: %f\n\r", dat.temperature, dat.Humidity);
+    wait_us(1000000);
   }
-
-  float temp = th.ReadTemperature(CELCIUS);
-  printf("Temp: %f\n\r", temp);
-
-  while(1);*/
 
   int success = InitialiseAzureDemo();
 
   if (success != 0) {
     return success;
-  }
+  }*/
 
   Timer provisionalTimer;
 
-  Sensor *lightSensor = new Sensor(A0, "Light", 500ms);
-  Sensor *temperatureSensor = new Sensor(A3, "Temperature", 500ms);
-  Sensor *humiditySensor = new Sensor(A3, "Humidity", 500ms);
-  Sensor *moistureSensor = new Sensor(A3, "Moisture", 500ms);
+  Sensor<AnalogIn> *lightSensor = new Sensor(A0, "Light", 500ms);
+  Sensor<AnalogIn> *temperatureSensor = new Sensor("Temperature", 500ms);
+  Sensor<AnalogIn> *humiditySensor = new Sensor("Humidity", 500ms);
+  Sensor<AnalogIn> *moistureSensor = new Sensor(A3, "Moisture", 500ms);
 
   /*lightSensor->StartSensing();
   temperatureSensor->StartSensing();
   humiditySensor->StartSensing();
   moistureSensor->StartSensing();*/
 
-  vector<Sensor *> updatingValuesFromSensors;
+  vector<Sensor<AnalogIn> *> updatingValuesFromSensors;
 
   updatingValuesFromSensors.push_back(lightSensor);
   updatingValuesFromSensors.push_back(temperatureSensor);
   updatingValuesFromSensors.push_back(humiditySensor);
   updatingValuesFromSensors.push_back(moistureSensor);
 
-  // NetworkData* networkData = new NetworkData(updatingValuesFromSensors);
-  // networkData->SendData();
+  NetworkData* networkData = new NetworkData(updatingValuesFromSensors, 60000ms); //60,000ms = 1m
 
   provisionalTimer.start();
   ThisThread::sleep_for(15000ms);
