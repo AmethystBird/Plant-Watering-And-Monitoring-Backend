@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 #pragma once
+#include "AnalogIn.h"
 #include "NetworkData.h"
 #include "dht20.h"
 using namespace std;
@@ -11,6 +12,7 @@ using namespace std;
 //#define BLINKING_RATE     500ms
 
 // AnalogIn light(A0);
+DHT20 temperatureAndHumiditySensor;
 
 int main() {
   /*DHT20 th;
@@ -28,32 +30,40 @@ int main() {
 
   Timer provisionalTimer;
 
-  Sensor<AnalogIn> *lightSensor = new Sensor(A0, "Light", 500ms);
+  Sensor<AnalogIn> lightSensor(A0, "Light", 500ms);
+  Sensor<DHT20> temperatureSensor(temperatureAndHumiditySensor, "Temperature", 500ms);
+  Sensor<DHT20> humiditySensor(temperatureAndHumiditySensor, "Humidity", 500ms);
+  Sensor<AnalogIn> moistureSensor(A0, "Moisture", 500ms);
+
+  /*Sensor<AnalogIn> *lightSensor = new Sensor(A0, "Light", 500ms);
   Sensor<AnalogIn> *temperatureSensor = new Sensor("Temperature", 500ms);
   Sensor<AnalogIn> *humiditySensor = new Sensor("Humidity", 500ms);
-  Sensor<AnalogIn> *moistureSensor = new Sensor(A3, "Moisture", 500ms);
+  Sensor<AnalogIn> *moistureSensor = new Sensor(A3, "Moisture", 500ms);*/
 
   /*lightSensor->StartSensing();
   temperatureSensor->StartSensing();
   humiditySensor->StartSensing();
   moistureSensor->StartSensing();*/
 
-  vector<Sensor<AnalogIn> *> updatingValuesFromSensors;
+  vector<Sensor<AnalogIn>*> updatingValuesFromAnalogSensors;
+  vector<Sensor<DHT20>*> updatingValuesFromDHT20Sensors;
 
-  updatingValuesFromSensors.push_back(lightSensor);
-  updatingValuesFromSensors.push_back(temperatureSensor);
-  updatingValuesFromSensors.push_back(humiditySensor);
-  updatingValuesFromSensors.push_back(moistureSensor);
+  updatingValuesFromAnalogSensors->push_back(lightSensor);
+  //updatingValuesFromSensors.push_back(temperatureSensor);
+  //updatingValuesFromSensors.push_back(humiditySensor);
+  updatingValuesFromAnalogSensors->push_back(moistureSensor);
 
-  NetworkData* networkData = new NetworkData(updatingValuesFromSensors, 60000ms); //60,000ms = 1m
+  NetworkData *networkData =
+      new NetworkData(updatingValuesFromAnalogSensors, 60000ms); // 60,000ms = 1m
 
   provisionalTimer.start();
   ThisThread::sleep_for(15000ms);
-  while (provisionalTimer.elapsed_time() < 16s);
-  lightSensor->StopSensing();
-  temperatureSensor->StopSensing();
-  humiditySensor->StopSensing();
-  moistureSensor->StopSensing();
+  while (provisionalTimer.elapsed_time() < 16s)
+    ;
+  lightSensor.StopSensing();
+  temperatureSensor.StopSensing();
+  humiditySensor.StopSensing();
+  moistureSensor.StopSensing();
 
   // Initialise the digital pin LED1 as an output
   /*DigitalOut led(LED1);

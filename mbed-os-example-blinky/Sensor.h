@@ -1,7 +1,7 @@
 #pragma once
 #include "EventQueue.h"
-#include "mbed.h"
 #include "Sensor.h"
+#include "mbed.h"
 //#include <chrono>
 #include <iostream>
 #include <vector>
@@ -12,16 +12,18 @@ public:
   Sensor(sensorPin sensorPinIn, string sensorNameIn,
          chrono::milliseconds readRateIn);
 
-  AnalogIn GetSensor();
+  //sensorPin GetSensor();
 
-  // void StartSensing();
+  //template <class sensorPin>
+  void StartSensing(sensorPin sensorType);
+
   void StopSensing();
 
   // float* GetUpdatingValues();
   vector<float> *GetUpdatingValues();
   float GetLastValue();
 
-  string GetSensorType();
+  string GetSensorName();
 
 protected:
   void DisplaySensorValue();
@@ -31,7 +33,10 @@ protected:
 private:
   Thread updateLoopThread;
   EventQueue sensorQueue;
-  sensorPin sensorType; // sensor
+
+  sensorPin sensorType;
+
+  //AnalogIn sensorType; // sensor
   // double sensorValue;
   string sensorName;
   chrono::milliseconds readRate;

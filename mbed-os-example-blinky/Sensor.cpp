@@ -1,7 +1,7 @@
 #include "Sensor.h"
 
 template <class sensorPin>
-Sensor<sensorPin>::Sensor(PinName sensorPinIn, string sensorNameIn, chrono::milliseconds readRateIn) : sensorType(sensorPinIn) {
+Sensor<sensorPin>::Sensor(sensorPin sensorPinIn, string sensorNameIn, chrono::milliseconds readRateIn) : sensorType(sensorPinIn) {
     sensorName = sensorNameIn;
     readRate = readRateIn;
     isSensing = false;
@@ -36,16 +36,18 @@ void Sensor::UpdateLoop()
     updateLoopThread.join();
 }*/
 
-void Sensor::StopSensing()
+template <class sensorPin>
+void Sensor<sensorPin>::StopSensing()
 {
     isSensing = false;
 }
 
-void Sensor::DisplaySensorValue()
+template <class sensorPin>
+void Sensor<sensorPin>::DisplaySensorValue()
 {
-    if (sensorType == "Temperature" || "Humidity")
+    if (sensorName == "Temperature" || "Humidity")
     {
-        if (sensorType == "Temperature")
+        if (sensorName == "Temperature")
         {
             float mockedTemperatureValue = GetMockedSensorValue();
 
@@ -53,7 +55,7 @@ void Sensor::DisplaySensorValue()
 
             sensorBuffer.push_back(mockedTemperatureValue);
         }
-        else if (sensorType == "Humidity")
+        else if (sensorName == "Humidity")
         {
             float mockedHumidityValue = GetMockedSensorValue();
 
@@ -62,22 +64,23 @@ void Sensor::DisplaySensorValue()
             sensorBuffer.push_back(mockedHumidityValue);
         }
     }
-    else if (sensorType == "Moisture")
+    else if (sensorName == "Moisture")
     {
         float randomMoistureValue = GetMockedSensorValue();
         cout << "Moisture: (Mocked)" << randomMoistureValue << "\n\n";
         sensorBuffer.push_back(randomMoistureValue);
     }
-    else if (sensorType == "Light")
+    else if (sensorName == "Light")
     {
-        cout << "Light: " << sensorInput << "\n\n";
+        cout << "Light: " << sensorType << "\n\n";
         
-        float sensorInputValue = (float) sensorInput;
+        float sensorInputValue = (float) sensorType;
         sensorBuffer.push_back(sensorInputValue);
     }
 }
 
-float Sensor::GetMockedSensorValue()
+template <class sensorPin>
+float Sensor<sensorPin>::GetMockedSensorValue()
 {
     int randomValue = rand() % 100;
     float randomDecimalValue = static_cast<float>(randomValue);
@@ -90,12 +93,14 @@ float Sensor::GetMockedSensorValue()
     return sensorBuffer.data();
 }*/
 
-vector<float>* Sensor::GetUpdatingValues()
+template <class sensorPin>
+vector<float>* Sensor<sensorPin>::GetUpdatingValues()
 {
     return &sensorBuffer;
 }
 
-float Sensor::GetLastValue()
+template <class sensorPin>
+float Sensor<sensorPin>::GetLastValue()
 {
     if (sensorBuffer.empty())
     {
@@ -107,7 +112,8 @@ float Sensor::GetLastValue()
     return valueToSend;
 }
 
-string Sensor::GetSensorType()
+template <class sensorPin>
+string Sensor<sensorPin>::GetSensorName()
 {
-    return sensorType;
+    return sensorName;
 }
