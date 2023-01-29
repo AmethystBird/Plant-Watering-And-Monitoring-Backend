@@ -1,14 +1,14 @@
 #include "NetworkData.h"
 
-NetworkData::NetworkData(vector<Sensor<AnalogIn*>> updatingValuesFromSensorsIn, chrono::milliseconds uploadRateIn)
+NetworkData::NetworkData(vector<Sensor<AnalogIn>>* updatingValuesFromSensorsIn, chrono::milliseconds uploadRateIn)
 {
     isUploading = true;
     updatingValuesFromSensors = updatingValuesFromSensorsIn;
 
     //uploadLoopThread.start(callback(this, &NetworkData::Update));
 
-    auto DataUpload = [this]() {
-        NetworkDataUpdateLoop(updatingValuesFromSensors);
+    auto DataUpload = [this, updatingValuesFromSensorsIn]() {
+        NetworkDataUpdateLoop(updatingValuesFromSensorsIn);
     };
 
     auto DispatchToQueue = [this]() {

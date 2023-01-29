@@ -1,0 +1,45 @@
+#include "DHT20Sensor.h"
+
+DHT20Sensor::DHT20Sensor(DHT20 sensorInterfaceIn, string valueTypeIn, chrono::milliseconds readRateIn) {
+    sensorInterfaceType = sensorInterfaceIn.readTemperatureAndHumidity();
+    valueType = valueTypeIn;
+    readRate = readRateIn;
+
+    auto DataString = [this, valueTypeIn]() {
+        if (valueType == "Temperature")
+        {
+            cout << "Sensor: " << sensorInterfaceType.temperature << "\n";
+        }
+        else if (valueType == "Humidity")
+        {
+            cout << "Sensor: " << sensorInterfaceType.Humidity << "\n";
+        }
+        this->DisplaySensorValue();
+    };
+
+    auto DispatchToQueue = [this]() {
+        this->sensorQueue.dispatch_forever();
+    };
+
+    updateLoopThread.start(DispatchToQueue);
+    sensorQueue.call_every(readRate, DataString);
+}
+
+float DHT20Sensor::GetLastValue()
+{
+    if (sensorBuffer.empty())
+    {
+        if (valueType == "Temperature")
+        {
+            cout << "[WARNING] " << sensorInterfaceType.temperature << " buffer is empty.\n";
+        }
+        else if (valueType == "Humidity")
+        {
+            cout << "[WARNING] " << sensorInterfaceType.Humidity << " buffer is empty.\n";
+        }
+        return 0.f;
+    }
+    float valueToSend = sensorBuffer.front();
+    sensorBuffer.erase(sensorBuffer.begin());
+    return valueToSend;
+}

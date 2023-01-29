@@ -1,4 +1,5 @@
 #pragma once
+#include "AnalogIn.h"
 #include "EventQueue.h"
 #include "Sensor.h"
 #include "mbed.h"
@@ -6,22 +7,47 @@
 #include <iostream>
 #include <vector>
 
-template <class sensorPin>
+/*template <class SensorValue_t = float>
+class SensorClass {
+    protected:
+     string _name;
+     SensorValue_t _last;
+
+     virtual SensorValue_t getLastValue() = 0; //pvf 
+    public:
+    string GetSensorName() {
+        return _name;
+    }
+};
+
+template <class SensorValue_t = float>
+class AnalogSensor : public SensorClass<float> {
+
+    private: 
+    AnalogIn _adc;
+
+    public:
+    AnalogSensor(PinName adcPin, string nam) : _adc(adcPin) {
+        _name = nam;
+    }
+    virtual SensorValue_t getLastValue() override  {
+        
+    }
+
+};*/
+
 class Sensor {
 public:
-  Sensor(sensorPin sensorPinIn, string sensorNameIn,
-         chrono::milliseconds readRateIn);
-
   //sensorPin GetSensor();
 
   //template <class sensorPin>
-  void StartSensing(sensorPin sensorType);
+  //void StartSensing(AnalogIn sensorInterfaceType);
 
-  void StopSensing();
+  //void StopSensing();
 
   // float* GetUpdatingValues();
   vector<float> *GetUpdatingValues();
-  float GetLastValue();
+  virtual float GetLastValue();
 
   string GetSensorName();
 
@@ -30,18 +56,11 @@ protected:
   float GetMockedSensorValue();
   // void UpdateLoop();
 
-private:
   Thread updateLoopThread;
   EventQueue sensorQueue;
 
-  sensorPin sensorType;
-
-  //AnalogIn sensorType; // sensor
-  // double sensorValue;
-  string sensorName;
+  string valueType;
   chrono::milliseconds readRate;
-
-  bool isSensing;
 
   vector<float> sensorBuffer;
 };

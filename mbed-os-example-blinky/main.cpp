@@ -14,6 +14,8 @@ using namespace std;
 // AnalogIn light(A0);
 DHT20 temperatureAndHumiditySensor;
 
+vector<Sensor<AnalogIn>> updatingValuesFromAnalogSensors;
+
 int main() {
   /*DHT20 th;
   while (true) {
@@ -31,9 +33,9 @@ int main() {
   Timer provisionalTimer;
 
   Sensor<AnalogIn> lightSensor(A0, "Light", 500ms);
-  Sensor<DHT20> temperatureSensor(temperatureAndHumiditySensor, "Temperature", 500ms);
-  Sensor<DHT20> humiditySensor(temperatureAndHumiditySensor, "Humidity", 500ms);
-  Sensor<AnalogIn> moistureSensor(A0, "Moisture", 500ms);
+  //Sensor<DHT20> temperatureSensor(temperatureAndHumiditySensor, "Temperature", 500ms);
+  //Sensor<DHT20> humiditySensor(temperatureAndHumiditySensor, "Humidity", 500ms);
+  //Sensor<AnalogIn> moistureSensor(A0, "Moisture", 500ms);
 
   /*Sensor<AnalogIn> *lightSensor = new Sensor(A0, "Light", 500ms);
   Sensor<AnalogIn> *temperatureSensor = new Sensor("Temperature", 500ms);
@@ -45,25 +47,23 @@ int main() {
   humiditySensor->StartSensing();
   moistureSensor->StartSensing();*/
 
-  vector<Sensor<AnalogIn>*> updatingValuesFromAnalogSensors;
-  vector<Sensor<DHT20>*> updatingValuesFromDHT20Sensors;
+  //vector<Sensor<AnalogIn>> updatingValuesFromAnalogSensors;
+  //vector<Sensor<DHT20>*> updatingValuesFromDHT20Sensors;
 
-  updatingValuesFromAnalogSensors->push_back(lightSensor);
+  updatingValuesFromAnalogSensors.push_back(lightSensor);
   //updatingValuesFromSensors.push_back(temperatureSensor);
   //updatingValuesFromSensors.push_back(humiditySensor);
-  updatingValuesFromAnalogSensors->push_back(moistureSensor);
+  //updatingValuesFromAnalogSensors->push_back(moistureSensor);
 
-  NetworkData *networkData =
-      new NetworkData(updatingValuesFromAnalogSensors, 60000ms); // 60,000ms = 1m
+  NetworkData *networkData = new NetworkData(&updatingValuesFromAnalogSensors, 60000ms); // 60,000ms = 1m
 
   provisionalTimer.start();
   ThisThread::sleep_for(15000ms);
-  while (provisionalTimer.elapsed_time() < 16s)
-    ;
+  while (provisionalTimer.elapsed_time() < 16s);
   lightSensor.StopSensing();
-  temperatureSensor.StopSensing();
-  humiditySensor.StopSensing();
-  moistureSensor.StopSensing();
+  //temperatureSensor.StopSensing();
+  //humiditySensor.StopSensing();
+  //moistureSensor.StopSensing();
 
   // Initialise the digital pin LED1 as an output
   /*DigitalOut led(LED1);

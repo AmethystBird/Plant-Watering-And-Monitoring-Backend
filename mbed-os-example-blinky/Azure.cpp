@@ -253,7 +253,7 @@ int InitialiseAzureDemo() {
     return 0;
 }
 
-void NetworkDataUpdateLoop(vector<Sensor<AnalogIn*>> updatingValuesFromSensors) {
+void NetworkDataUpdateLoop(vector<Sensor<AnalogIn>>* updatingValuesFromSensors) {
     bool trace_on = MBED_CONF_APP_IOTHUB_CLIENT_TRACE;
     tickcounter_ms_t interval = 100;
     IOTHUB_CLIENT_RESULT res;
@@ -348,10 +348,14 @@ void NetworkDataUpdateLoop(vector<Sensor<AnalogIn*>> updatingValuesFromSensors) 
             messageToSend = messageToSend + valueToSend;
         }*/
 
-        float lightValue = updatingValuesFromSensors[0].GetLastValue();
-        float temperatureValue = updatingValuesFromSensors[1].GetLastValue();
-        float humidityValue = updatingValuesFromSensors[2].GetLastValue();
-        float moistureValue = updatingValuesFromSensors[3].GetLastValue();
+        //float testValue = updatingValuesFromSensors->begin()->GetLastValue();
+        float lightValue = updatingValuesFromSensors->operator[](0).GetLastValue();
+        float moistureValue = updatingValuesFromSensors->operator[](1).GetLastValue();
+
+        //float lightValue = updatingValuesFromSensors[0].GetLastValue();
+        //float temperatureValue = updatingValuesFromSensors[1].GetLastValue();
+        //float humidityValue = updatingValuesFromSensors[2].GetLastValue();
+        //float moistureValue = updatingValuesFromSensors[3].GetLastValue();
 
         //sprintf(message, "{ \"Light\" : %5.2f, \"Temperature\" : %5.2f, \"Humidity\" : %5.2f, \"Moisture\" : %5.2f }", lightValue, temperatureValue, humidityValue, moistureValue);
         sprintf(message, "{ \"Light\" : %5.2f }", lightValue);
