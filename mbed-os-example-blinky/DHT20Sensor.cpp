@@ -14,7 +14,7 @@ DHT20Sensor::DHT20Sensor(DHT20 sensorInterfaceIn, string valueTypeIn, chrono::mi
         {
             cout << "Sensor: " << sensorInterfaceType.Humidity << "\n";
         }
-        this->DisplaySensorValue();
+        DisplaySensorValue();
     };
 
     auto DispatchToQueue = [this]() {
@@ -42,4 +42,24 @@ float DHT20Sensor::GetLastValue()
     float valueToSend = sensorBuffer.front();
     sensorBuffer.erase(sensorBuffer.begin());
     return valueToSend;
+}
+
+void DHT20Sensor::DisplaySensorValue()
+{
+    if (valueType == "Temperature")
+    {
+        float mockedTemperatureValue = GetMockedSensorValue();
+
+        cout << "Temperature: (Mocked)" << mockedTemperatureValue << "\n";
+
+        sensorBuffer.push_back(mockedTemperatureValue);
+    }
+    else if (valueType == "Humidity")
+    {
+        float mockedHumidityValue = GetMockedSensorValue();
+
+        cout << "Humidity: (Mocked)" << mockedHumidityValue << "\n\n";
+
+        sensorBuffer.push_back(mockedHumidityValue);
+    }
 }

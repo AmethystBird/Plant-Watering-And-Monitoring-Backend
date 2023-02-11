@@ -43,13 +43,13 @@ public:
   //template <class sensorPin>
   //void StartSensing(AnalogIn sensorInterfaceType);
 
-  //void StopSensing();
-
   // float* GetUpdatingValues();
   vector<float> *GetUpdatingValues();
-  virtual float GetLastValue();
+  virtual float GetLastValue() = 0;
 
   string GetSensorName();
+
+  void StopSensing();
 
 protected:
   void DisplaySensorValue();

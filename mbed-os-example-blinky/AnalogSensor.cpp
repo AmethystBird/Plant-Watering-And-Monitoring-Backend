@@ -6,7 +6,7 @@ AnalogSensor::AnalogSensor(AnalogIn sensorInterfaceIn, string valueTypeIn, chron
 
     auto DataString = [this]() {
         cout << "Sensor: " << sensorInterfaceType << "\n";
-        this->DisplaySensorValue();
+        DisplaySensorValue();
     };
 
     auto DispatchToQueue = [this]() {
@@ -27,4 +27,21 @@ float AnalogSensor::GetLastValue()
     float valueToSend = sensorBuffer.front();
     sensorBuffer.erase(sensorBuffer.begin());
     return valueToSend;
+}
+
+void AnalogSensor::DisplaySensorValue()
+{
+    if (valueType == "Moisture")
+    {
+        float randomMoistureValue = GetMockedSensorValue();
+        cout << "Moisture: (Mocked)" << randomMoistureValue << "\n\n";
+        sensorBuffer.push_back(randomMoistureValue);
+    }
+    else if (valueType == "Light")
+    {
+        cout << "Light: " << sensorInterfaceType << "\n\n";
+        
+        float sensorInputValue = (float) sensorInterfaceType;
+        sensorBuffer.push_back(sensorInputValue);
+    }
 }

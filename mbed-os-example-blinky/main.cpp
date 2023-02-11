@@ -6,6 +6,10 @@
 #include "AnalogIn.h"
 #include "NetworkData.h"
 #include "dht20.h"
+
+#include "AnalogSensor.h"
+//#include "DHT20Sensor.h"
+
 using namespace std;
 
 // Blinking rate in milliseconds
@@ -14,7 +18,10 @@ using namespace std;
 // AnalogIn light(A0);
 DHT20 temperatureAndHumiditySensor;
 
-vector<Sensor<AnalogIn>> updatingValuesFromAnalogSensors;
+vector<Sensor*> updatingValuesFromSensors;
+
+AnalogSensor* lightSensor = new AnalogSensor(A0, "Light", 500ms);
+//DHT20Sensor* temperatureSensor = new DHT20Sensor(temperatureAndHumiditySensor, "Temperature", 500ms);
 
 int main() {
   /*DHT20 th;
@@ -32,7 +39,8 @@ int main() {
 
   Timer provisionalTimer;
 
-  Sensor<AnalogIn> lightSensor(A0, "Light", 500ms);
+  //AnalogSensor* lightSensor = new AnalogSensor(A0, "Light", 500ms);
+
   //Sensor<DHT20> temperatureSensor(temperatureAndHumiditySensor, "Temperature", 500ms);
   //Sensor<DHT20> humiditySensor(temperatureAndHumiditySensor, "Humidity", 500ms);
   //Sensor<AnalogIn> moistureSensor(A0, "Moisture", 500ms);
@@ -50,17 +58,18 @@ int main() {
   //vector<Sensor<AnalogIn>> updatingValuesFromAnalogSensors;
   //vector<Sensor<DHT20>*> updatingValuesFromDHT20Sensors;
 
-  updatingValuesFromAnalogSensors.push_back(lightSensor);
   //updatingValuesFromSensors.push_back(temperatureSensor);
   //updatingValuesFromSensors.push_back(humiditySensor);
   //updatingValuesFromAnalogSensors->push_back(moistureSensor);
 
-  NetworkData *networkData = new NetworkData(&updatingValuesFromAnalogSensors, 60000ms); // 60,000ms = 1m
+  updatingValuesFromSensors.push_back((Sensor*)lightSensor);
+
+  NetworkData *networkData = new NetworkData(&updatingValuesFromSensors, 60000ms); // 60,000ms = 1m
 
   provisionalTimer.start();
   ThisThread::sleep_for(15000ms);
   while (provisionalTimer.elapsed_time() < 16s);
-  lightSensor.StopSensing();
+  lightSensor->StopSensing();
   //temperatureSensor.StopSensing();
   //humiditySensor.StopSensing();
   //moistureSensor.StopSensing();

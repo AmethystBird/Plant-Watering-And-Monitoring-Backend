@@ -7,5 +7,7 @@ public:
     virtual float GetLastValue() override;
 
 protected:
+    void DisplaySensorValue();
+
     AnalogIn sensorInterfaceType;
 };

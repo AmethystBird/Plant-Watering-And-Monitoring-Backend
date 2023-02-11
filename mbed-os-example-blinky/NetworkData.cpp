@@ -1,6 +1,6 @@
 #include "NetworkData.h"
 
-NetworkData::NetworkData(vector<Sensor<AnalogIn>>* updatingValuesFromSensorsIn, chrono::milliseconds uploadRateIn)
+NetworkData::NetworkData(vector<Sensor*>* updatingValuesFromSensorsIn, chrono::milliseconds uploadRateIn)
 {
     isUploading = true;
     updatingValuesFromSensors = updatingValuesFromSensorsIn;

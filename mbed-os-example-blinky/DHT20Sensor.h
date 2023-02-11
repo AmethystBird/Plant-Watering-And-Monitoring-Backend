@@ -7,5 +7,7 @@ public:
 
     virtual float GetLastValue() override;
 protected:
-DHT20::EnvData sensorInterfaceType;
+    void DisplaySensorValue();
+    
+    DHT20::EnvData sensorInterfaceType;
 };
