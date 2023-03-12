@@ -13,7 +13,7 @@
 using namespace std;
 
 // Blinking rate in milliseconds
-//#define BLINKING_RATE     500ms
+#define BLINKING_RATE     500ms
 
 // AnalogIn light(A0);
 DHT20 temperatureAndHumiditySensor;
@@ -36,6 +36,15 @@ int main() {
   if (success != 0) {
     return success;
   }*/
+
+  // Initialise the digital pin LED1 as an output
+  DigitalOut led(LED1);
+
+  while (true) {
+      led = !led;
+      //cout << light << endl;
+      ThisThread::sleep_for(BLINKING_RATE);
+  }
 
   Timer provisionalTimer;
 
@@ -70,16 +79,8 @@ int main() {
   ThisThread::sleep_for(15000ms);
   while (provisionalTimer.elapsed_time() < 16s);
   lightSensor->StopSensing();
+  networkData->StopSending();
   //temperatureSensor.StopSensing();
   //humiditySensor.StopSensing();
   //moistureSensor.StopSensing();
-
-  // Initialise the digital pin LED1 as an output
-  /*DigitalOut led(LED1);
-
-  while (true) {
-      led = !led;
-      //cout << light << endl;
-      ThisThread::sleep_for(BLINKING_RATE);
-  }*/
 }

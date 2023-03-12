@@ -8,7 +8,8 @@ NetworkData::NetworkData(vector<Sensor*>* updatingValuesFromSensorsIn, chrono::m
     //uploadLoopThread.start(callback(this, &NetworkData::Update));
 
     auto DataUpload = [this, updatingValuesFromSensorsIn]() {
-        NetworkDataUpdateLoop(updatingValuesFromSensorsIn);
+        //NetworkDataUpdateLoop(updatingValuesFromSensorsIn);
+        sensorDataPublisher->Connect();
     };
 
     auto DispatchToQueue = [this]() {
@@ -17,6 +18,11 @@ NetworkData::NetworkData(vector<Sensor*>* updatingValuesFromSensorsIn, chrono::m
 
     uploadLoopThread.start(DispatchToQueue);
     uploadQueue.call_every(readRate, DataUpload);
+}
+
+void NetworkData::StopSending()
+{
+    uploadQueue.break_dispatch();
 }
 
 //Called by thread as proxy to uploading values
