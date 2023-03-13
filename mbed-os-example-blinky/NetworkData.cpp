@@ -9,7 +9,7 @@ NetworkData::NetworkData(vector<Sensor*>* updatingValuesFromSensorsIn, chrono::m
 
     auto DataUpload = [this, updatingValuesFromSensorsIn]() {
         //NetworkDataUpdateLoop(updatingValuesFromSensorsIn);
-        sensorDataPublisher->Connect();
+        sensorDataPublisher->Connect("localhost", 1883);
     };
 
     auto DispatchToQueue = [this]() {

@@ -5,34 +5,31 @@ using namespace std;
 
 Publisher::Publisher()
 {
-    mosquitto_lib_init();
-
-    payload = mosquitto_new("nucleo-publisher", true, NULL); //Generate client instance (null for no authentication requirements)
+    net = NetworkInterface::get_default_instance();
+    MQTTClient client(&socket); //Generation of client instance
 }
 
-int Publisher::Connect()
+int Publisher::Connect(const char* address, uint16_t port)
 {
-    int connectionInfo = mosquitto_connect(payload, "localhost", 1883, 60); //Input connection info
-    if (connectionInfo != 0) //Check for successful connection
-    {
-        cout << "Client board unable to connect to broker.\n Error: %d\n", connectionInfo;
-        mosquitto_destroy(payload);
-        return -1;
-    }
-    printf("Client board connected to broker.\n");
-    return 0;
+    SocketAddress testAddress;
+    testAddress.set_ip_address(address); //localhost
+    testAddress.set_port(port); //1883
+
+    socket.open(net);
+    socket.connect(testAddress);
 }
 
 void Publisher::Disconnect()
 {
-    mosquitto_disconnect(payload);
+    socket.close();
+    /*mosquitto_disconnect(payload);
     mosquitto_destroy(payload);
-    mosquitto_lib_cleanup();
+    mosquitto_lib_cleanup();*/
 }
 
 void Publisher::SendTelemetry()
 {
-    mosquitto_publish(payload, NULL, "SensorDataTest", 6, "Hello", 0, false); //NULL for no message ID
+    //mosquitto_publish(payload, NULL, "SensorDataTest", 6, "Hello", 0, false); //NULL for no message ID
 }
 
 /*
