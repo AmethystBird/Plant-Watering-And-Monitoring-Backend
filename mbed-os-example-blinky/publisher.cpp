@@ -1,34 +1,56 @@
 #include "iostream"
 #include "publisher.h"
+#include <exception>
 
 using namespace std;
 
-Publisher::Publisher()
+Publisher::Publisher() : client(&socket) //<<-- Generation of client instance
 {
     net = NetworkInterface::get_default_instance();
-    MQTTClient client(&socket); //Generation of client instance
+    //MQTTClient client(&socket); //Generation of client instance
 }
 
-int Publisher::Connect(const char* address, uint16_t port)
+void Publisher::Connect(const char* address, uint16_t port)
 {
     SocketAddress testAddress;
+
     testAddress.set_ip_address(address); //localhost
     testAddress.set_port(port); //1883
 
     socket.open(net);
     socket.connect(testAddress);
+
+    connectionData = MQTTPacket_connectData_initializer;
+    connectionData.MQTTVersion = 3;
+    connectionData.clientID.cstring = (char*)"clientID";
+    connectionData.username.cstring = (char*)"username";
+    connectionData.password.cstring = (char*)"password";
+    client.connect(connectionData);
 }
 
 void Publisher::Disconnect()
 {
+    client.disconnect();
     socket.close();
     /*mosquitto_disconnect(payload);
     mosquitto_destroy(payload);
     mosquitto_lib_cleanup();*/
 }
 
-void Publisher::SendTelemetry()
+void Publisher::SendTelemetry(float value, float type)
 {
+    char payload[64];
+    sprintf(payload, "Type: %f | Value: %f", type, value);
+
+    MQTT::Message message;
+    message.qos = MQTT::QoS::QOS0;
+    message.payload = (void*)payload;
+    message.payloadlen = strlen((char*)message.payload);
+    message.dup = false;
+    message.retained = false;
+
+    client.publish("testValue", message);
+
     //mosquitto_publish(payload, NULL, "SensorDataTest", 6, "Hello", 0, false); //NULL for no message ID
 }
 

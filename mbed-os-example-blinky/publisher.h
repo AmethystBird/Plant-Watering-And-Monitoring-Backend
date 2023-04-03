@@ -4,11 +4,13 @@
 class Publisher {
 public:
   Publisher();
-  int Connect(const char* address, uint16_t port);
+  void Connect(const char* address, uint16_t port);
   void Disconnect();
-  void SendTelemetry();
+  void SendTelemetry(float value, float type);
 
 private:
 NetworkInterface *net;
 TCPSocket socket;
+MQTTClient client;
+MQTTPacket_connectData connectionData;
 };
