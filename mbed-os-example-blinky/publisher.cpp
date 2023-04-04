@@ -7,10 +7,11 @@ using namespace std;
 Publisher::Publisher() : client(&socket) //<<-- Generation of client instance
 {
     net = NetworkInterface::get_default_instance();
+    isConnected = false;
     //MQTTClient client(&socket); //Generation of client instance
 }
 
-void Publisher::Connect(const char* address, uint16_t port)
+void Publisher::Connect(const char* address, uint16_t port, string* clientID, string* username, string* password)
 {
     SocketAddress testAddress;
 
@@ -22,10 +23,11 @@ void Publisher::Connect(const char* address, uint16_t port)
 
     connectionData = MQTTPacket_connectData_initializer;
     connectionData.MQTTVersion = 3;
-    connectionData.clientID.cstring = (char*)"clientID";
-    connectionData.username.cstring = (char*)"username";
-    connectionData.password.cstring = (char*)"password";
+    connectionData.clientID.cstring = (char*) clientID;
+    connectionData.username.cstring = (char*) username;
+    connectionData.password.cstring = (char*) password;
     client.connect(connectionData);
+    isConnected = true;
 }
 
 void Publisher::Disconnect()
@@ -49,7 +51,7 @@ void Publisher::SendTelemetry(float value, float type)
     message.dup = false;
     message.retained = false;
 
-    client.publish("testValue", message);
+    client.publish("chilli/light", message);
 
     //mosquitto_publish(payload, NULL, "SensorDataTest", 6, "Hello", 0, false); //NULL for no message ID
 }

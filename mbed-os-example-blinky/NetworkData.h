@@ -3,7 +3,7 @@
 
 class NetworkData {
 public:
-  NetworkData(vector<Sensor *> *updatingValuesFromSensorsIn, chrono::milliseconds uploadRateIn);
+  NetworkData(vector<Sensor *> *updatingValuesFromSensorsIn, chrono::milliseconds uploadRateIn, string clientIDIn, string usernameIn, string passwordIn);
 
   void StopSending();
 
@@ -14,4 +14,8 @@ private:
   chrono::milliseconds readRate;
   EventQueue uploadQueue;
   Publisher* sensorDataPublisher;
+
+  string clientID;
+  string username;
+  string password;
 };

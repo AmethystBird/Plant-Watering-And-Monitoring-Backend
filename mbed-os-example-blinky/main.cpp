@@ -38,15 +38,15 @@ int main() {
   }*/
 
   // Initialise the digital pin LED1 as an output
-  DigitalOut led(LED1);
+  /*DigitalOut led(LED1);
 
   while (true) {
       led = !led;
-      //cout << light << endl;
+      cout << "test cout" << endl;
       ThisThread::sleep_for(BLINKING_RATE);
-  }
+  }*/
 
-  Timer provisionalTimer;
+  //Timer provisionalTimer;
 
   //AnalogSensor* lightSensor = new AnalogSensor(A0, "Light", 500ms);
 
@@ -71,15 +71,21 @@ int main() {
   //updatingValuesFromSensors.push_back(humiditySensor);
   //updatingValuesFromAnalogSensors->push_back(moistureSensor);
 
+//Work on this
   updatingValuesFromSensors.push_back((Sensor*)lightSensor);
 
-  NetworkData *networkData = new NetworkData(&updatingValuesFromSensors, 60000ms); // 60,000ms = 1m
+  string clientID = "nucleo01";
+  string username = "nucleo";
+  string password = "1234";
 
-  provisionalTimer.start();
+  NetworkData *networkData = new NetworkData(&updatingValuesFromSensors, 6000ms, clientID, username, password); // 60,000ms = 1m
+
+  /*provisionalTimer.start();
   ThisThread::sleep_for(15000ms);
   while (provisionalTimer.elapsed_time() < 16s);
   lightSensor->StopSensing();
-  networkData->StopSending();
+  networkData->StopSending();*/
+
   //temperatureSensor.StopSensing();
   //humiditySensor.StopSensing();
   //moistureSensor.StopSensing();
