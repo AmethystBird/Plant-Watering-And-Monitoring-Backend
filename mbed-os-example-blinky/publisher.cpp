@@ -6,7 +6,8 @@ using namespace std;
 
 Publisher::Publisher() : client(&socket) //<<-- Generation of client instance
 {
-    net = NetworkInterface::get_default_instance();
+    //net = NetworkInterface::get_default_instance();
+    net->connect();
     isConnected = false;
     //MQTTClient client(&socket); //Generation of client instance
 }
@@ -16,10 +17,14 @@ void Publisher::Connect(const char* address, uint16_t port, string* clientID, st
     SocketAddress testAddress;
 
     testAddress.set_ip_address(address); //localhost
+    cout << "Set IP: " << address << endl;
     testAddress.set_port(port); //1883
+    cout << "Set Port: " << port << endl;
 
     socket.open(net);
+    cout << "Socket opened" << endl;
     socket.connect(testAddress);
+    cout << "Socket connected" << endl;
 
     connectionData = MQTTPacket_connectData_initializer;
     connectionData.MQTTVersion = 3;
@@ -27,6 +32,7 @@ void Publisher::Connect(const char* address, uint16_t port, string* clientID, st
     connectionData.username.cstring = (char*) username;
     connectionData.password.cstring = (char*) password;
     client.connect(connectionData);
+    cout << "Client connected" << endl;
     isConnected = true;
 }
 
@@ -43,6 +49,7 @@ void Publisher::SendTelemetry(float value, float type)
 {
     char payload[64];
     sprintf(payload, "Type: %f | Value: %f", type, value);
+    cout << "Payload: " << payload << endl;
 
     MQTT::Message message;
     message.qos = MQTT::QoS::QOS0;
@@ -52,6 +59,7 @@ void Publisher::SendTelemetry(float value, float type)
     message.retained = false;
 
     client.publish("chilli/light", message);
+    cout << "PUBLISHED MESSAGE" << endl;
 
     //mosquitto_publish(payload, NULL, "SensorDataTest", 6, "Hello", 0, false); //NULL for no message ID
 }

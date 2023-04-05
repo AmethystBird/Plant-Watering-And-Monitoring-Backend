@@ -20,6 +20,9 @@ NetworkData::NetworkData(vector<Sensor*>* updatingValuesFromSensorsIn, chrono::m
             
             sensorDataPublisher->SendTelemetry(32, 64);
         }
+        else {
+            sensorDataPublisher->SendTelemetry(32, 64);
+        }
 
         //const char* address, uint16_t port, string* clientID, string* username, string* password
     };

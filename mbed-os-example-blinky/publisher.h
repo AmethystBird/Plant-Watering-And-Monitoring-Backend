@@ -1,5 +1,6 @@
 #include <MQTTClientMbedOs.h>
 #include "Sensor.h"
+#include "EthernetInterface.h"
 
 class Publisher {
 public:
@@ -11,7 +12,8 @@ public:
 bool isConnected;
 
 private:
-NetworkInterface *net;
+//NetworkInterface *net;
+EthernetInterface *net;
 TCPSocket socket;
 MQTTClient client;
 MQTTPacket_connectData connectionData;
