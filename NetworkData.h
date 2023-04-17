@@ -1,5 +1,6 @@
 #pragma once
-#include "publisher.h"
+//#include "publisher.h"
+#include "MQTTPlantClient.h"
 
 class NetworkData {
 public:
@@ -13,7 +14,8 @@ private:
   vector<Sensor *> *updatingValuesFromSensors;
   chrono::milliseconds readRate;
   EventQueue uploadQueue;
-  Publisher* sensorDataPublisher;
+  //Publisher* sensorDataPublisher;
+  MQTTPlantClient sensorDataPublisher;
 
   string clientID;
   string username;

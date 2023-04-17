@@ -63,3 +63,23 @@ void DHT20Sensor::DisplaySensorValue()
         sensorBuffer.push_back(mockedHumidityValue);
     }
 }
+
+const char* DHT20Sensor::GetTopic()
+{
+    return topic;
+}
+
+void DHT20Sensor::SetTopic(const char* topicIn)
+{
+    topic = topicIn;
+}
+
+const char* DHT20Sensor::GetTopic2()
+{
+    return topic2;
+}
+
+void DHT20Sensor::SetTopic2(const char* topic2In)
+{
+    topic2 = topic2In;
+}

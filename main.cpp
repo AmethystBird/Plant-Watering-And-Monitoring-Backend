@@ -3,11 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 #pragma once
-#include "AnalogIn.h"
 #include "NetworkData.h"
 #include "dht20.h"
-
 #include "AnalogSensor.h"
+
 //#include "DHT20Sensor.h"
 
 using namespace std;
@@ -19,6 +18,7 @@ using namespace std;
 DHT20 temperatureAndHumiditySensor;
 
 vector<Sensor*> updatingValuesFromSensors;
+NetworkData* networkData;
 
 AnalogSensor* lightSensor = new AnalogSensor(A0, "Light", 500ms);
 //DHT20Sensor* temperatureSensor = new DHT20Sensor(temperatureAndHumiditySensor, "Temperature", 500ms);
@@ -78,8 +78,31 @@ int main() {
   string username = "nucleo";
   string password = "1234";
 
-  NetworkData *networkData = new NetworkData(&updatingValuesFromSensors, 6000ms, clientID, username, password); // 60,000ms = 1m
+  networkData = new NetworkData(&updatingValuesFromSensors, 6000ms, clientID, username, password); // 60,000ms = 1m
 
+  /*MQTTPlantClient client;
+  client.Connect();
+  client.Authenticate();
+
+  client.Publish();
+  cout << "Published default";
+  wait_us(5000000); // 5s
+  client.Publish("chilli/light", 4, 8);
+  cout << "Published custom";
+
+  wait_us(10000000); // 10s
+
+  if (client.GetIsConnected()) {
+    cout << "Client still connected; now disconnecting.";
+  }
+  client.Disconnect();
+  if (!client.GetIsConnected()) {
+    cout << "Client successfully disconnected.";
+  }*/
+  
+  while (true) {
+      ThisThread::sleep_for(1000ms);
+  }
   /*provisionalTimer.start();
   ThisThread::sleep_for(15000ms);
   while (provisionalTimer.elapsed_time() < 16s);

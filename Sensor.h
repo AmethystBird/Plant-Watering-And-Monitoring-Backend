@@ -1,8 +1,7 @@
 #pragma once
-#include "AnalogIn.h"
+#include "mbed.h"
 #include "EventQueue.h"
 #include "Sensor.h"
-#include "mbed.h"
 //#include <chrono>
 #include <iostream>
 #include <vector>
@@ -51,6 +50,9 @@ public:
 
   void StopSensing();
 
+  virtual const char* GetTopic() = 0;
+  virtual void SetTopic(const char* topicIn) = 0;
+
 protected:
   void DisplaySensorValue();
   float GetMockedSensorValue();
@@ -63,4 +65,6 @@ protected:
   chrono::milliseconds readRate;
 
   vector<float> sensorBuffer;
+
+  const char* topic;
 };

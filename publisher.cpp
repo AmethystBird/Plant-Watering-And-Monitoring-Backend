@@ -1,13 +1,14 @@
 #include "iostream"
 #include "publisher.h"
 #include <exception>
-
+#include <stdio.h>
+#include <string.h>
 using namespace std;
 
 Publisher::Publisher() : client(&socket) //<<-- Generation of client instance
 {
     //net = NetworkInterface::get_default_instance();
-    net->connect();
+    net.connect();
     isConnected = false;
     //MQTTClient client(&socket); //Generation of client instance
 }
@@ -21,7 +22,7 @@ void Publisher::Connect(const char* address, uint16_t port, string* clientID, st
     testAddress.set_port(port); //1883
     cout << "Set Port: " << port << endl;
 
-    socket.open(net);
+    socket.open(&net);
     cout << "Socket opened" << endl;
     socket.connect(testAddress);
     cout << "Socket connected" << endl;

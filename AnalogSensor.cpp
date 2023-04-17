@@ -45,3 +45,13 @@ void AnalogSensor::DisplaySensorValue()
         sensorBuffer.push_back(sensorInputValue);
     }
 }
+
+const char* AnalogSensor::GetTopic()
+{
+    return topic;
+}
+
+void AnalogSensor::SetTopic(const char* topicIn)
+{
+    topic = topicIn;
+}

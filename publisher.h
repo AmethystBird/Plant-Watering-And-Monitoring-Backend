@@ -13,7 +13,7 @@ bool isConnected;
 
 private:
 //NetworkInterface *net;
-EthernetInterface *net;
+EthernetInterface net;
 TCPSocket socket;
 MQTTClient client;
 MQTTPacket_connectData connectionData;
