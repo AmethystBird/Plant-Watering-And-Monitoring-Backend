@@ -10,6 +10,11 @@ doxygen_objdb_*
 # Private settings
 mbed_settings.py
 
+# Project specifics
+mbed-mqtt
+mbed-os
+ntp-client
+
 # Default Build Directory
 .build/
 BUILD/
