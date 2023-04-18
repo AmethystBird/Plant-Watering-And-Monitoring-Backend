@@ -1,7 +1,8 @@
 #include "AnalogSensor.h"
 
-AnalogSensor::AnalogSensor(AnalogIn sensorInterfaceIn, string valueTypeIn, chrono::milliseconds readRateIn) : sensorInterfaceType(sensorInterfaceIn) {
+AnalogSensor::AnalogSensor(AnalogIn sensorInterfaceIn, string valueTypeIn, const char* topicIn, chrono::milliseconds readRateIn) : sensorInterfaceType(sensorInterfaceIn) {
     valueType = valueTypeIn;
+    topic = topicIn;
     readRate = readRateIn;
 
     auto DataString = [this]() {
@@ -44,14 +45,4 @@ void AnalogSensor::DisplaySensorValue()
         float sensorInputValue = (float) sensorInterfaceType;
         sensorBuffer.push_back(sensorInputValue);
     }
-}
-
-const char* AnalogSensor::GetTopic()
-{
-    return topic;
-}
-
-void AnalogSensor::SetTopic(const char* topicIn)
-{
-    topic = topicIn;
 }

@@ -27,3 +27,13 @@ void Sensor::StopSensing()
 {
     sensorQueue.break_dispatch();
 }
+
+const char* Sensor::GetTopic()
+{
+    return topic;
+}
+
+void Sensor::SetTopic(const char* topicIn)
+{
+    topic = topicIn;
+}

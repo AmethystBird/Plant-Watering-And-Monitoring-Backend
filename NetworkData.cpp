@@ -27,8 +27,19 @@ NetworkData::NetworkData(vector<Sensor*>* updatingValuesFromSensorsIn, chrono::m
         } else {
             cout << "NetworkData Constructor: GetIsConnected() returns true" << endl;
         }
-        sensorDataPublisher.Publish("chilli/light", 0.f, updatingValuesFromSensors->back()->GetLastValue());
 
+        //sensorDataPublisher.Publish(updatingValuesFromSensors->back()->GetTopic(), 0.f, updatingValuesFromSensors->back()->GetLastValue());
+
+        for (unsigned int i = 0; i < updatingValuesFromSensors->size(); i++)
+        {
+            //vector<Sensor*>& vectorReference = *updatingValuesFromSensors;
+            //int a = vectorReference[0];
+
+            //Sensor* sensor = updatingValuesFromSensors->operator[](0); //As opposed to 'at(),' does not check bounds
+
+            Sensor* indexedSensor = updatingValuesFromSensors->at(i);
+            sensorDataPublisher.Publish(indexedSensor->GetTopic(), 0.f, indexedSensor->GetLastValue());
+        }
         //const char* address, uint16_t port, string* clientID, string* username, string* password
     };
 

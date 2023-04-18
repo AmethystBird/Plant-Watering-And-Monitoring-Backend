@@ -50,8 +50,8 @@ public:
 
   void StopSensing();
 
-  virtual const char* GetTopic() = 0;
-  virtual void SetTopic(const char* topicIn) = 0;
+  const char* GetTopic();
+  void SetTopic(const char* topicIn);
 
 protected:
   void DisplaySensorValue();

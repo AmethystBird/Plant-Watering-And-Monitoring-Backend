@@ -6,6 +6,7 @@
 #include "NetworkData.h"
 #include "dht20.h"
 #include "AnalogSensor.h"
+#include "DHT20Sensor.h"
 
 //#include "DHT20Sensor.h"
 
@@ -15,13 +16,15 @@ using namespace std;
 #define BLINKING_RATE     500ms
 
 // AnalogIn light(A0);
-DHT20 temperatureAndHumiditySensor;
+DHT20 DHT20SensorLib;
+//DHT20::EnvData dat;
 
 vector<Sensor*> updatingValuesFromSensors;
 NetworkData* networkData;
 
-AnalogSensor* lightSensor = new AnalogSensor(A0, "Light", 500ms);
-//DHT20Sensor* temperatureSensor = new DHT20Sensor(temperatureAndHumiditySensor, "Temperature", 500ms);
+AnalogSensor* lightSensor = new AnalogSensor(A0, "Light", "chilli/light", 500ms);
+AnalogSensor* moistureSensor = new AnalogSensor(A0, "Moisture", "chilli/moisture", 500ms);
+DHT20Sensor* temperatureSensor = new DHT20Sensor("Temperature", "chilli/temperature", 500ms);
 
 int main() {
   /*DHT20 th;
@@ -73,6 +76,8 @@ int main() {
 
 //Work on this
   updatingValuesFromSensors.push_back((Sensor*)lightSensor);
+  updatingValuesFromSensors.push_back((Sensor*)moistureSensor);
+  updatingValuesFromSensors.push_back((Sensor*)temperatureSensor);
 
   string clientID = "nucleo01";
   string username = "nucleo";

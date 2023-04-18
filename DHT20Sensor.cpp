@@ -1,8 +1,9 @@
 #include "DHT20Sensor.h"
 
-DHT20Sensor::DHT20Sensor(DHT20 sensorInterfaceIn, string valueTypeIn, chrono::milliseconds readRateIn) {
-    sensorInterfaceType = sensorInterfaceIn.readTemperatureAndHumidity();
+DHT20Sensor::DHT20Sensor(string valueTypeIn, const char* topicIn, chrono::milliseconds readRateIn) {
+    sensorInterfaceType = DHT20SensorLib.readTemperatureAndHumidity();
     valueType = valueTypeIn;
+    topic = topicIn;
     readRate = readRateIn;
 
     auto DataString = [this, valueTypeIn]() {
@@ -62,24 +63,4 @@ void DHT20Sensor::DisplaySensorValue()
 
         sensorBuffer.push_back(mockedHumidityValue);
     }
-}
-
-const char* DHT20Sensor::GetTopic()
-{
-    return topic;
-}
-
-void DHT20Sensor::SetTopic(const char* topicIn)
-{
-    topic = topicIn;
-}
-
-const char* DHT20Sensor::GetTopic2()
-{
-    return topic2;
-}
-
-void DHT20Sensor::SetTopic2(const char* topic2In)
-{
-    topic2 = topic2In;
 }
