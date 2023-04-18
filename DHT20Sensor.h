@@ -7,7 +7,8 @@ public:
     virtual float GetLastValue() override;
 
 protected:
-  void DisplaySensorValue();
+  //Acquires last sensor value, sends it to the sensor buffer & prints it
+  virtual void AcquireSensorValue() override;
 
   DHT20 DHT20SensorLib;
   DHT20::EnvData sensorInterfaceType;

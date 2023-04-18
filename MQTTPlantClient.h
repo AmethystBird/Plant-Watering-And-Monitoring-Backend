@@ -18,16 +18,20 @@ class MQTTPlantClient {
 public:
   MQTTPlantClient();
 
+  //Authenticates user to Mosquitto server. Requires that a connection has already been established.
   void Authenticate(string clientID = "nucleo01", string username = "nucleo", string password = "1234");
-  void Publish(const char* topic = "chilli", float telemetryType = -1, float telemetryValue = -1); //parameters: //string topic = "chilli/light", string telemetryType, float telemetryValue
-  //void SendTelemetry(string topic, float value);
+  //Sends telemetry to Mosquitto server. Requires that connection & authentication have both been established.
+  void Publish(const char* topic = "chilli", float telemetryType = -1, float telemetryValue = -1);
 
-  //Getters & setters
+  //Gets whether a connection to a given Mosquitto server has been established
   bool GetIsConnected();
+  //Sets whether a connection to a given Mosquitto server has been established
   void SetIsConnected(bool isConnectedIn, string address = "192.168.1.6", uint16_t port = 1883);
 
 protected:
+  //Connections to a given Mosquitto server
   bool Connect(string address, uint16_t port);
+  //Disconnects from a given Mosquitto server
   void Disconnect();
 
 private:

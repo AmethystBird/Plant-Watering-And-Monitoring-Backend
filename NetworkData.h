@@ -6,6 +6,7 @@ class NetworkData {
 public:
   NetworkData(vector<Sensor *> *updatingValuesFromSensorsIn, chrono::milliseconds uploadRateIn, string clientIDIn, string usernameIn, string passwordIn);
 
+  //Stops telemetry being sent
   void StopSending();
 
 private:

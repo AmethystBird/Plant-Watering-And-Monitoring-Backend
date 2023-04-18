@@ -68,7 +68,6 @@ bool MQTTPlantClient::Connect(string address, uint16_t port)
 
 void MQTTPlantClient::Authenticate(string clientID, string username, string password)
 {   
-    //MQTTPacket_connectData pcd = MQTTPacket_connectData_initializer;
     connectionData = MQTTPacket_connectData_initializer;
     connectionData.MQTTVersion = 3;
     connectionData.clientID.cstring = (char*)clientID.c_str();
@@ -121,9 +120,7 @@ void MQTTPlantClient::SetIsConnected(bool isConnectedIn, string address, uint16_
 void MQTTPlantClient::Publish(const char* topic, float telemetryType, float telemetryValue)
 {
     char payload[64];
-    //sprintf(payload, "Type: %f | Value: %f", telemetryType, telemetryValue);
     cout << "MQTTPlantClient | Publish(): " << payload << " | Type: " << telemetryType << " | Value: " << telemetryValue << endl;
-    //cout << "Payload: " << payload << endl;
 
     MQTT::Message message;
     message.qos = MQTT::QoS::QOS0;

@@ -7,7 +7,7 @@ AnalogSensor::AnalogSensor(AnalogIn sensorInterfaceIn, string valueTypeIn, const
 
     auto DataString = [this]() {
         cout << "Sensor: " << sensorInterfaceType << "\n";
-        DisplaySensorValue();
+        AcquireSensorValue();
     };
 
     auto DispatchToQueue = [this]() {
@@ -30,7 +30,7 @@ float AnalogSensor::GetLastValue()
     return valueToSend;
 }
 
-void AnalogSensor::DisplaySensorValue()
+void AnalogSensor::AcquireSensorValue()
 {
     if (valueType == "Moisture")
     {

@@ -2,61 +2,33 @@
 #include "mbed.h"
 #include "EventQueue.h"
 #include "Sensor.h"
-//#include <chrono>
 #include <iostream>
 #include <vector>
 
-/*template <class SensorValue_t = float>
-class SensorClass {
-    protected:
-     string _name;
-     SensorValue_t _last;
-
-     virtual SensorValue_t getLastValue() = 0; //pvf 
-    public:
-    string GetSensorName() {
-        return _name;
-    }
-};
-
-template <class SensorValue_t = float>
-class AnalogSensor : public SensorClass<float> {
-
-    private: 
-    AnalogIn _adc;
-
-    public:
-    AnalogSensor(PinName adcPin, string nam) : _adc(adcPin) {
-        _name = nam;
-    }
-    virtual SensorValue_t getLastValue() override  {
-        
-    }
-
-};*/
-
 class Sensor {
 public:
-  //sensorPin GetSensor();
-
-  //template <class sensorPin>
-  //void StartSensing(AnalogIn sensorInterfaceType);
-
-  // float* GetUpdatingValues();
+  //Gets a vector of all sensor values
   vector<float> *GetUpdatingValues();
+  //Gets the most recent sensor value
   virtual float GetLastValue() = 0;
 
+  //Gets the sensor name / value type
   string GetSensorName();
 
+  //Stops sensor sensing
   void StopSensing();
 
+  //Gets the Mosquitto topic where telemetry is sent
   const char* GetTopic();
+  //Sets the Mosquitto topic where telemetry is sent
   void SetTopic(const char* topicIn);
 
 protected:
-  void DisplaySensorValue();
+  //Acquires last sensor value, sends it to the sensor buffer & prints it
+  virtual void AcquireSensorValue() = 0;
+
+  //Generates & gets a random number for the sake of mocking sensor data
   float GetMockedSensorValue();
-  // void UpdateLoop();
 
   Thread updateLoopThread;
   EventQueue sensorQueue;

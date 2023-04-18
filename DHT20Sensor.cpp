@@ -15,7 +15,7 @@ DHT20Sensor::DHT20Sensor(string valueTypeIn, const char* topicIn, chrono::millis
         {
             cout << "Sensor: " << sensorInterfaceType.Humidity << "\n";
         }
-        DisplaySensorValue();
+        AcquireSensorValue();
     };
 
     auto DispatchToQueue = [this]() {
@@ -45,7 +45,7 @@ float DHT20Sensor::GetLastValue()
     return valueToSend;
 }
 
-void DHT20Sensor::DisplaySensorValue()
+void DHT20Sensor::AcquireSensorValue()
 {
     if (valueType == "Temperature")
     {
