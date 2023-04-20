@@ -16,8 +16,12 @@ vector<Sensor*> updatingValuesFromSensors;
 NetworkData* networkData;
 
 AnalogSensor *lightSensor = new AnalogSensor(A0, "Light", "chilli/light", 500ms);
-AnalogSensor *moistureSensor = new AnalogSensor(A0, "Moisture", "chilli/moisture", 500ms);
+AnalogSensor *moistureSensor = new AnalogSensor(A1, "Moisture", "chilli/moisture", 500ms);
 DHT20Sensor *temperatureSensor = new DHT20Sensor("Temperature", "chilli/temperature", 500ms);
+
+//Test
+//AnalogIn H2O_1(A1);
+//~Test
 
 int main() {
   //Assigning sensors to vector

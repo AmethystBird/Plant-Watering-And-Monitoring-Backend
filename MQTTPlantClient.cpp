@@ -122,6 +122,8 @@ void MQTTPlantClient::Publish(const char* topic, float telemetryType, float tele
     char payload[64];
     cout << "MQTTPlantClient | Publish(): " << payload << " | Type: " << telemetryType << " | Value: " << telemetryValue << endl;
 
+    sprintf(payload, "%f", telemetryValue);
+
     MQTT::Message message;
     message.qos = MQTT::QoS::QOS0;
     message.payload = (void*)payload;

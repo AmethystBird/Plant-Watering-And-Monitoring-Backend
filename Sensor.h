@@ -7,8 +7,8 @@
 
 class Sensor {
 public:
-  //Gets a vector of all sensor values
-  vector<float> *GetUpdatingValues();
+  //Gets a vector of all sensor values; currently unused
+  //vector<float> *GetUpdatingValues();
   //Gets the most recent sensor value
   virtual float GetLastValue() = 0;
 
@@ -37,6 +37,7 @@ protected:
   chrono::milliseconds readRate;
 
   vector<float> sensorBuffer;
+  float currentSensorValue;
 
   const char* topic;
 };

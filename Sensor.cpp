@@ -8,10 +8,10 @@ float Sensor::GetMockedSensorValue()
     return randomDecimalValue;
 }
 
-vector<float>* Sensor::GetUpdatingValues()
+/*vector<float>* Sensor::GetUpdatingValues()
 {
     return &sensorBuffer;
-}
+}*/
 
 string Sensor::GetSensorName()
 {

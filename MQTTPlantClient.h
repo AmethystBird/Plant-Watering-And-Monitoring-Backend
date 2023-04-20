@@ -29,7 +29,7 @@ public:
   void SetIsConnected(bool isConnectedIn, string address = "192.168.1.6", uint16_t port = 1883);
 
 protected:
-  //Connections to a given Mosquitto server
+  //Connects to a given Mosquitto server
   bool Connect(string address, uint16_t port);
   //Disconnects from a given Mosquitto server
   void Disconnect();

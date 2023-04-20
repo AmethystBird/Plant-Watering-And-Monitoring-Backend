@@ -20,29 +20,44 @@ AnalogSensor::AnalogSensor(AnalogIn sensorInterfaceIn, string valueTypeIn, const
 
 float AnalogSensor::GetLastValue()
 {
-    if (sensorBuffer.empty())
+    if (currentSensorValue >= 0.f)
+    {
+        return currentSensorValue;
+    }
+    else {
+        cout << "[WARNING] " << sensorInterfaceType << " last value is empty.\n";
+        return -1.f;
+    }
+
+    /*if (sensorBuffer.empty())
     {
         cout << "[WARNING] " << sensorInterfaceType << " buffer is empty.\n";
         return 0.f;
     }
     float valueToSend = sensorBuffer.front();
     sensorBuffer.erase(sensorBuffer.begin());
-    return valueToSend;
+    return valueToSend;*/
 }
 
 void AnalogSensor::AcquireSensorValue()
 {
     if (valueType == "Moisture")
     {
-        float randomMoistureValue = GetMockedSensorValue();
-        cout << "Moisture: (Mocked)" << randomMoistureValue << "\n\n";
-        sensorBuffer.push_back(randomMoistureValue);
+        cout << "Moisture";
     }
     else if (valueType == "Light")
     {
-        cout << "Light: " << sensorInterfaceType << "\n\n";
-        
-        float sensorInputValue = (float) sensorInterfaceType;
-        sensorBuffer.push_back(sensorInputValue);
+        cout << "Light";
     }
+    else
+    {
+        return;
+    }
+
+    cout << ": " << sensorInterfaceType << "\n\n";
+
+    currentSensorValue = (float) sensorInterfaceType;
+
+    //float sensorInputValue = (float) sensorInterfaceType;
+    //sensorBuffer.push_back(sensorInputValue);
 }

@@ -28,7 +28,24 @@ DHT20Sensor::DHT20Sensor(string valueTypeIn, const char* topicIn, chrono::millis
 
 float DHT20Sensor::GetLastValue()
 {
-    if (sensorBuffer.empty())
+    if (currentSensorValue >= 0.f)
+    {
+        return currentSensorValue;
+    }
+    else
+    {
+        if (valueType == "Temperature")
+        {
+            cout << "[WARNING] " << sensorInterfaceType.temperature << " last value is empty.\n";
+        }
+        else if (valueType == "Temperature")
+        {
+            cout << "[WARNING] " << sensorInterfaceType.Humidity << " last value is empty.\n";
+        }
+        return -1.f;
+    }
+
+    /*if (sensorBuffer.empty())
     {
         if (valueType == "Temperature")
         {
@@ -42,12 +59,27 @@ float DHT20Sensor::GetLastValue()
     }
     float valueToSend = sensorBuffer.front();
     sensorBuffer.erase(sensorBuffer.begin());
-    return valueToSend;
+    return valueToSend;*/
 }
 
 void DHT20Sensor::AcquireSensorValue()
 {
     if (valueType == "Temperature")
+    {
+        cout << "Temperature: " << sensorInterfaceType.temperature << "\n\n";
+        currentSensorValue = (float) sensorInterfaceType.temperature;
+    }
+    else if (valueType == "Humidity")
+    {
+        cout << "Humidity: " << sensorInterfaceType.Humidity << "\n\n";
+        currentSensorValue = (float) sensorInterfaceType.Humidity;
+    }
+    else
+    {
+        return;
+    }
+
+    /*if (valueType == "Temperature")
     {
         float mockedTemperatureValue = GetMockedSensorValue();
 
@@ -62,5 +94,5 @@ void DHT20Sensor::AcquireSensorValue()
         cout << "Humidity: (Mocked)" << mockedHumidityValue << "\n\n";
 
         sensorBuffer.push_back(mockedHumidityValue);
-    }
+    }*/
 }
