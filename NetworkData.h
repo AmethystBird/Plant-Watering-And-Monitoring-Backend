@@ -1,5 +1,4 @@
 #pragma once
-//#include "publisher.h"
 #include "MQTTPlantClient.h"
 
 class NetworkData {

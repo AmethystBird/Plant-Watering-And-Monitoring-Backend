@@ -1,6 +1,6 @@
 #include "AnalogSensor.h"
 
-AnalogSensor::AnalogSensor(AnalogIn sensorInterfaceIn, string valueTypeIn, const char* topicIn, chrono::milliseconds readRateIn) : sensorInterfaceType(sensorInterfaceIn) {
+AnalogSensor::AnalogSensor(PinName sensorInterfaceIn_Pin, string valueTypeIn, string topicIn, chrono::milliseconds readRateIn) : sensorInterfaceType(sensorInterfaceIn_Pin) {
     valueType = valueTypeIn;
     topic = topicIn;
     readRate = readRateIn;
@@ -16,27 +16,6 @@ AnalogSensor::AnalogSensor(AnalogIn sensorInterfaceIn, string valueTypeIn, const
 
     updateLoopThread.start(DispatchToQueue);
     sensorQueue.call_every(readRate, DataString);
-}
-
-float AnalogSensor::GetLastValue()
-{
-    if (currentSensorValue >= 0.f)
-    {
-        return currentSensorValue;
-    }
-    else {
-        cout << "[WARNING] " << sensorInterfaceType << " last value is empty.\n";
-        return -1.f;
-    }
-
-    /*if (sensorBuffer.empty())
-    {
-        cout << "[WARNING] " << sensorInterfaceType << " buffer is empty.\n";
-        return 0.f;
-    }
-    float valueToSend = sensorBuffer.front();
-    sensorBuffer.erase(sensorBuffer.begin());
-    return valueToSend;*/
 }
 
 void AnalogSensor::AcquireSensorValue()
@@ -56,8 +35,41 @@ void AnalogSensor::AcquireSensorValue()
 
     cout << ": " << sensorInterfaceType << "\n\n";
 
-    currentSensorValue = (float) sensorInterfaceType;
+    if (sensorBuffer.size() < 16)
+    {
+        SensorValueAndMetadata_t currentSensorData;
+        currentSensorData.sensorValue = (float) sensorInterfaceType;
+        time_t valueDateTimeRetrieval = time(0);
+        currentSensorData.valueDateTime = ctime(&valueDateTimeRetrieval);
+        sensorBuffer.push(currentSensorData);
+    }
+    else
+    {
+        cout << "[WARNING] Sensor buffer is full; cannot add any more values" << endl;
+    }
 
     //float sensorInputValue = (float) sensorInterfaceType;
     //sensorBuffer.push_back(sensorInputValue);
+}
+
+SensorValueAndMetadata_t AnalogSensor::GetLastValue()
+{
+    //vector<Sensor::sensorValueAndMetadata> buff;
+
+    if (sensorBuffer.size() <= 0)
+    {
+        cout << "[WARNING] Sensor buffer is empty; cannot retrieve any more values" << endl;
+
+        sensorValueAndMetadata emptyValues;
+        emptyValues.sensorValue = -1;
+        emptyValues.valueDateTime = "empty";
+        return emptyValues;
+        
+        //return Sensor::GetRedundantData();
+    }
+
+    cout << "Popped value off buffer" << endl;
+    SensorValueAndMetadata_t sensorBufferElement = sensorBuffer.front();
+    sensorBuffer.pop();
+    return sensorBufferElement;
 }

@@ -117,12 +117,12 @@ void MQTTPlantClient::SetIsConnected(bool isConnectedIn, string address, uint16_
     }
 }
 
-void MQTTPlantClient::Publish(const char* topic, float telemetryType, float telemetryValue)
+void MQTTPlantClient::Publish(string topic, float telemetryType, SensorValueAndMetadata_t telemetryData)
 {
     char payload[64];
-    cout << "MQTTPlantClient | Publish(): " << payload << " | Type: " << telemetryType << " | Value: " << telemetryValue << endl;
+    cout << "MQTTPlantClient | Publish(): " << payload << " | Type: " << telemetryType << " | Value: " << telemetryData.sensorValue << " | Time: " << telemetryData.valueDateTime << endl;
 
-    sprintf(payload, "%f", telemetryValue);
+    sprintf(payload, "V: %f T: %s", telemetryData.sensorValue, telemetryData.valueDateTime.c_str());
 
     MQTT::Message message;
     message.qos = MQTT::QoS::QOS0;
@@ -131,6 +131,6 @@ void MQTTPlantClient::Publish(const char* topic, float telemetryType, float tele
     message.dup = false;
     message.retained = false;
 
-    client.publish(topic, message);
+    client.publish(topic.c_str(), message);
     cout << "PUBLISHED MESSAGE" << endl;
 }

@@ -23,12 +23,25 @@ void Sensor::StopSensing()
     sensorQueue.break_dispatch();
 }
 
-const char* Sensor::GetTopic()
+string Sensor::GetTopic()
 {
     return topic;
 }
 
-void Sensor::SetTopic(const char* topicIn)
+void Sensor::SetTopic(string topicIn)
 {
     topic = topicIn;
 }
+
+unsigned int Sensor::GetSensorBufferSize()
+{
+    return sensorBuffer.size();
+}
+
+/*SensorValueAndMetadata_t Sensor::GetRedundantData()
+{
+    sensorValueAndMetadata emptyValues;
+    emptyValues.sensorValue = -1;
+    emptyValues.valueDateTime = "empty";
+    return emptyValues;
+}*/

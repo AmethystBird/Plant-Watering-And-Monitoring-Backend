@@ -1,6 +1,6 @@
 #include "DHT20Sensor.h"
 
-DHT20Sensor::DHT20Sensor(string valueTypeIn, const char* topicIn, chrono::milliseconds readRateIn) {
+DHT20Sensor::DHT20Sensor(string valueTypeIn, string topicIn, chrono::milliseconds readRateIn) {
     sensorInterfaceType = DHT20SensorLib.readTemperatureAndHumidity();
     valueType = valueTypeIn;
     topic = topicIn;
@@ -26,57 +26,33 @@ DHT20Sensor::DHT20Sensor(string valueTypeIn, const char* topicIn, chrono::millis
     sensorQueue.call_every(readRate, DataString);
 }
 
-float DHT20Sensor::GetLastValue()
+void DHT20Sensor::AcquireSensorValue()
 {
-    if (currentSensorValue >= 0.f)
+    if (sensorBuffer.size() < 16)
     {
-        return currentSensorValue;
-    }
-    else
-    {
+        SensorValueAndMetadata_t currentSensorData;
         if (valueType == "Temperature")
         {
-            cout << "[WARNING] " << sensorInterfaceType.temperature << " last value is empty.\n";
-        }
-        else if (valueType == "Temperature")
-        {
-            cout << "[WARNING] " << sensorInterfaceType.Humidity << " last value is empty.\n";
-        }
-        return -1.f;
-    }
-
-    /*if (sensorBuffer.empty())
-    {
-        if (valueType == "Temperature")
-        {
-            cout << "[WARNING] " << sensorInterfaceType.temperature << " buffer is empty.\n";
+            cout << "Temperature: " << sensorInterfaceType.temperature << "\n\n";
+            currentSensorData.sensorValue = (float) sensorInterfaceType.temperature;
         }
         else if (valueType == "Humidity")
         {
-            cout << "[WARNING] " << sensorInterfaceType.Humidity << " buffer is empty.\n";
+            cout << "Humidity: " << sensorInterfaceType.Humidity << "\n\n";
+            currentSensorData.sensorValue = (float) sensorInterfaceType.Humidity;
         }
-        return 0.f;
-    }
-    float valueToSend = sensorBuffer.front();
-    sensorBuffer.erase(sensorBuffer.begin());
-    return valueToSend;*/
-}
+        else
+        {
+            return;
+        }
 
-void DHT20Sensor::AcquireSensorValue()
-{
-    if (valueType == "Temperature")
-    {
-        cout << "Temperature: " << sensorInterfaceType.temperature << "\n\n";
-        currentSensorValue = (float) sensorInterfaceType.temperature;
-    }
-    else if (valueType == "Humidity")
-    {
-        cout << "Humidity: " << sensorInterfaceType.Humidity << "\n\n";
-        currentSensorValue = (float) sensorInterfaceType.Humidity;
+        time_t valueDateTimeRetrieval = time(0);
+        currentSensorData.valueDateTime = ctime(&valueDateTimeRetrieval);
+        sensorBuffer.push(currentSensorData);
     }
     else
     {
-        return;
+        cout << "[WARNING] Sensor buffer is full; cannot add any more values" << endl;
     }
 
     /*if (valueType == "Temperature")
@@ -95,4 +71,26 @@ void DHT20Sensor::AcquireSensorValue()
 
         sensorBuffer.push_back(mockedHumidityValue);
     }*/
+}
+
+SensorValueAndMetadata_t DHT20Sensor::GetLastValue()
+{
+    //vector<Sensor::sensorValueAndMetadata> buff;
+
+    if (sensorBuffer.size() <= 0)
+    {
+        cout << "[WARNING] Sensor buffer is empty; cannot retrieve any more values" << endl;
+        
+        sensorValueAndMetadata emptyValues;
+        emptyValues.sensorValue = -1;
+        emptyValues.valueDateTime = "empty";
+        return emptyValues;
+        
+        //return Sensor::GetRedundantData();
+    }
+
+    cout << "Popped value off buffer" << endl;
+    SensorValueAndMetadata_t sensorBufferElement = sensorBuffer.front();
+    sensorBuffer.pop();
+    return sensorBufferElement;
 }

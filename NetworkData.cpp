@@ -20,10 +20,22 @@ NetworkData::NetworkData(vector<Sensor*>* updatingValuesFromSensorsIn, chrono::m
             cout << "NetworkData Constructor: GetIsConnected() returns true" << endl;
         }
 
-        for (unsigned int i = 0; i < updatingValuesFromSensors->size(); i++)
+        //non-buffer version
+        /*for (unsigned int i = 0; i < updatingValuesFromSensors->size(); i++)
         {
             Sensor* indexedSensor = updatingValuesFromSensors->at(i);
             sensorDataPublisher.Publish(indexedSensor->GetTopic(), 0.f, indexedSensor->GetLastValue());
+        }*/
+
+        //buffer version
+        for (unsigned int i = 0; i < updatingValuesFromSensors->size(); i++)
+        {
+            Sensor* indexedSensor = updatingValuesFromSensors->at(i);
+
+            while (indexedSensor->GetSensorBufferSize() > 0)
+            {
+                sensorDataPublisher.Publish(indexedSensor->GetTopic(), 0.f, indexedSensor->GetLastValue());
+            }
         }
     };
 
