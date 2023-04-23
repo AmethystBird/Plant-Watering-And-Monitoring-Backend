@@ -15,7 +15,7 @@ typedef struct sensorValueAndMetadata {
 
 class Sensor {
 public:
-  Sensor();
+
   //Gets a vector of all sensor values; currently unused
   //vector<float> *GetUpdatingValues();
   //Gets the most recent sensor value

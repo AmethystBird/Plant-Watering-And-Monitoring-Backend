@@ -13,9 +13,10 @@ using namespace std;
 vector<Sensor*> updatingValuesFromSensors;
 NetworkData* networkData;
 
-AnalogSensor lightSensor(A0, "Light", "chilli/light", 500ms);
-AnalogSensor moistureSensor(A1, "Moisture", "chilli/moisture", 500ms);
-DHT20Sensor temperatureSensor("Temperature", "chilli/temperature", 500ms);
+//Originally 500ms
+AnalogSensor lightSensor(A0, "Light", "chilli/light", 1000ms);
+AnalogSensor moistureSensor(A1, "Moisture", "chilli/moisture", 1900ms);
+DHT20Sensor temperatureSensor("Temperature", "chilli/temperature", 1000ms);
 
 int main() {
   //Assigning sensors to vector
