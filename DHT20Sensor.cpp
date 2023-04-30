@@ -1,4 +1,5 @@
 #include "DHT20Sensor.h"
+#include <string>
 
 DHT20Sensor::DHT20Sensor(string valueTypeIn, string topicIn, chrono::milliseconds readRateIn) {
     sensorInterfaceType = DHT20SensorLib.readTemperatureAndHumidity();
@@ -47,7 +48,15 @@ void DHT20Sensor::AcquireSensorValue()
         }
 
         time_t valueDateTimeRetrieval = time(0);
-        currentSensorData.valueDateTime = ctime(&valueDateTimeRetrieval);
+        tm* valueDateTimeInfo = localtime(&valueDateTimeRetrieval);
+        int hours = valueDateTimeInfo->tm_hour;
+        int minutes = valueDateTimeInfo->tm_min;
+        int seconds = valueDateTimeInfo->tm_sec;
+
+        string timeToSend = "H: " + std::to_string(hours) + " M: " + std::to_string(minutes) + " S: " + std::to_string(seconds);
+
+        //currentSensorData.valueDateTime = ctime(&valueDateTimeRetrieval);
+        currentSensorData.valueDateTime = timeToSend;
         sensorBuffer.push(currentSensorData);
     }
     else

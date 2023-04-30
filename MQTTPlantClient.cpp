@@ -122,7 +122,7 @@ void MQTTPlantClient::Publish(string topic, float telemetryType, SensorValueAndM
     char payload[64];
     cout << "MQTTPlantClient | Publish(): " << payload << " | Type: " << telemetryType << " | Value: " << telemetryData.sensorValue << " | Time: " << telemetryData.valueDateTime << endl;
 
-    sprintf(payload, "V: %f T: %s", telemetryData.sensorValue, telemetryData.valueDateTime.c_str());
+    sprintf(payload, "V: %f %s", telemetryData.sensorValue, telemetryData.valueDateTime.c_str());
 
     MQTT::Message message;
     message.qos = MQTT::QoS::QOS0;

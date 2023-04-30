@@ -39,8 +39,21 @@ void AnalogSensor::AcquireSensorValue()
     {
         SensorValueAndMetadata_t currentSensorData;
         currentSensorData.sensorValue = (float) sensorInterfaceType;
-        time_t valueDateTimeRetrieval = time(0);
+
+        /*time_t valueDateTimeRetrieval = time(0);
         currentSensorData.valueDateTime = ctime(&valueDateTimeRetrieval);
+        sensorBuffer.push(currentSensorData);*/
+
+        time_t valueDateTimeRetrieval = time(0);
+        tm* valueDateTimeInfo = localtime(&valueDateTimeRetrieval);
+        int hours = valueDateTimeInfo->tm_hour;
+        int minutes = valueDateTimeInfo->tm_min;
+        int seconds = valueDateTimeInfo->tm_sec;
+
+        string timeToSend = "H: " + std::to_string(hours) + " M: " + std::to_string(minutes) + " S: " + std::to_string(seconds);
+
+        //currentSensorData.valueDateTime = ctime(&valueDateTimeRetrieval);
+        currentSensorData.valueDateTime = timeToSend;
         sensorBuffer.push(currentSensorData);
     }
     else
