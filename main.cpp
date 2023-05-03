@@ -17,12 +17,14 @@ NetworkData* networkData;
 AnalogSensor lightSensor(A0, "Light", "chilli/light", 1000ms);
 AnalogSensor moistureSensor(A1, "Moisture", "chilli/moisture", 1900ms);
 DHT20Sensor temperatureSensor("Temperature", "chilli/temperature", 1000ms);
+DHT20Sensor humiditySensor("Humidity", "chilli/humidity", 1000ms);
 
 int main() {
   //Assigning sensors to vector
    updatingValuesFromSensors.push_back(&lightSensor);
    updatingValuesFromSensors.push_back(&moistureSensor);
    updatingValuesFromSensors.push_back(&temperatureSensor);
+   updatingValuesFromSensors.push_back(&humiditySensor);
 
   //Authentication credentials
   string clientID = "nucleo01";

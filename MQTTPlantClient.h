@@ -28,7 +28,7 @@ public:
   //Gets whether a connection to a given Mosquitto server has been established
   bool GetIsConnected();
   //Sets whether a connection to a given Mosquitto server has been established
-  void SetIsConnected(bool isConnectedIn, string address = "192.168.1.6", uint16_t port = 1883);
+  void SetIsConnected(bool isConnectedIn, string address = "178.79.186.64", uint16_t port = 1883);
 
 protected:
   //Connects to a given Mosquitto server
