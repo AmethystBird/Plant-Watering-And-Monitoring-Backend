@@ -1,4 +1,5 @@
 #include "MQTTPlantClient.h"
+#include "NTPClient.h"
 
 EthernetInterface net;
 
@@ -21,6 +22,21 @@ bool MQTTPlantClient::Connect(string address, uint16_t port)
     {
         cout << "MQTTPlantClient | Connect(): IP Address obtained: " << a.get_ip_address() << endl;
     }
+
+    //Sets correct time for sensor value metadata
+    NTPClient ntpClient(&net);
+    ntpClient.set_server("time.google.com", 123);
+
+    // Get the time
+    time_t valueDateTimeRetrieval = ntpClient.get_timestamp();
+    if (valueDateTimeRetrieval < 0)
+    {
+        cout << "Error: Could not acquire current time. " << valueDateTimeRetrieval << endl;
+        net.disconnect();
+        return -1;
+    }
+
+    set_time(valueDateTimeRetrieval); //Setting of system time
 
     //Opens network interface socket
     errorCode = socket.open(&net);

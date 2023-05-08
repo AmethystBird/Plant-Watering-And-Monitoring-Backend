@@ -8,6 +8,7 @@
 #include "NetworkData.h"
 #include "dht20.h"
 
+
 using namespace std;
 
 vector<Sensor*> updatingValuesFromSensors;
